@@ -5564,10 +5564,10 @@ static int handle_rdtsc(struct kvm_vcpu *vcpu)
 	}
 	//printk("[handle_rdtsc] fake tsc: %llu\n", rdtsc_fake);
 	rdtsc_prev = rdtsc_real;
-    vcpu->arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
-    vcpu->arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
+    	vcpu->arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
+    	vcpu->arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
     
-    return skip_emulated_instruction(vcpu);
+   	 return skip_emulated_instruction(vcpu);
 }
 
 /*

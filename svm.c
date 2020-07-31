@@ -4788,7 +4788,7 @@ static u32 print_once = 1;
 
 static int handle_rdtsc_interception(struct vcpu_svm *svm) 
 {
-    static u64 rdtsc_fake = 0;
+    	static u64 rdtsc_fake = 0;
 	static u64 rdtsc_prev = 0;
 	u64 rdtsc_real = rdtsc();
 
@@ -4819,10 +4819,10 @@ static int handle_rdtsc_interception(struct vcpu_svm *svm)
 	//printk("[handle_rdtsc] fake tsc: %llu\n", rdtsc_fake);
 	rdtsc_prev = rdtsc_real;
 
-    svm->vcpu.arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
-    svm->vcpu.arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
+	svm->vcpu.arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
+    	svm->vcpu.arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
 
-    return skip_emulated_instruction(&svm->vcpu);
+    	return skip_emulated_instruction(&svm->vcpu);
 }
 
 static int (*const svm_exit_handlers[])(struct vcpu_svm *svm) = {
