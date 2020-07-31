@@ -5626,7 +5626,7 @@ static int (*kvm_vmx_exit_handlers[])(struct kvm_vcpu *vcpu) = {
 	[EXIT_REASON_VMFUNC]		      = handle_vmx_instruction,
 	[EXIT_REASON_PREEMPTION_TIMER]	      = handle_preemption_timer,
 	[EXIT_REASON_ENCLS]		      = handle_encls,
-	[EXIT_REASON_RDTSC]                   = handle_rdtsc,  //TODO: fix this
+	[EXIT_REASON_RDTSC]                   = handle_rdtsc,
 };
 
 static const int kvm_vmx_max_exit_handlers =
