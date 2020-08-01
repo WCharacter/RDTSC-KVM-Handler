@@ -1,6 +1,12 @@
 # Installation
 
 Copy this files into your linux kernel.
+
+For Pop!_OS users:
+* vmx.c is going to /arch/x86/kvm/vmx
+* svm.c is going to /arch/x86/kvm
+
+For new kernel:
 * vmx.c is going to /arch/x86/kvm/vmx
 * svm.c is going to /arch/x86/kvm/svm
 
