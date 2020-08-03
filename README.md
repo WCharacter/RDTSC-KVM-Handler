@@ -103,7 +103,7 @@ static int handle_rdtsc(struct kvm_vcpu *vcpu)
 }
 ```
 
-# Changes for AMD users
+## Changes for AMD users
 Open svm.c in text editor.
 
 Find _static int (*const svm_exit_handlers[])(struct vcpu_svm *svm)_ (~2700 lines) and add this line:
@@ -160,5 +160,29 @@ static int handle_rdtsc_interception(struct vcpu_svm *svm)
 }
 ```
 
+# Kernel building
+* Clone the kernel from [official](https://github.com/torvalds/linux) repository or from repository of your os.
+* Make changes for your cpu
+* Install the requirements for kernel building
+```bash
+sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev
+```
+* Copy your current config into your kernel folder
+```bash
+cp -v /boot/config-$(uname -r) .config
+```
+* Make kernel
+```bash
+make -j $(nproc)
+```
+* Install kernel
+```bash
+sudo make INSTALL_MOD_STRIP=1 modules_install && sudo make install
+```
+* Reboot your system
+* Check if a new kernel was installed
+```bash
+uname -a
+```
 # Issues
 There is a lot of kernel versions, so this changes in your kernel can lead to compile time errors. I'm not guarantee that this method would work on your kernel without any modifications. This code works with Pop_OS which uses 5.4.41+ kernel and it works with a newest kernel from official repository of [linux](https://github.com/torvalds/linux). Latest kernel modification for Arch linux uses the same vmx and svm files as official repository, so it should work too.
