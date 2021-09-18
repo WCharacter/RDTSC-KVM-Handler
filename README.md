@@ -57,10 +57,10 @@ First you need to find _setup_vmcs_config_ function (about 2500 lines) and add t
 
 Next you need to find an array of pointers to handlers initialization called _static int (*kvm_vmx_exit_handlers[])(struct kvm_vcpu *vcpu)_ and add the line to the end:
 ```c
-    [EXIT_REASON_PREEMPTION_TIMER]	= handle_preemption_timer,
-	[EXIT_REASON_ENCLS]				= handle_encls,
-	[EXIT_REASON_BUS_LOCK]			= handle_bus_lock_vmexit,
-    [EXIT_REASON_RDTSC]				= handle_rdtsc, //added line
+    	[EXIT_REASON_PREEMPTION_TIMER]	= handle_preemption_timer,
+	[EXIT_REASON_ENCLS]		= handle_encls,
+	[EXIT_REASON_BUS_LOCK]		= handle_bus_lock_vmexit,
+    	[EXIT_REASON_RDTSC]		= handle_rdtsc, //added line
 };
 ```
 
@@ -95,10 +95,10 @@ static int handle_rdtsc(struct kvm_vcpu *vcpu)
 		rdtsc_fake = rdtsc_real;
 	}
 	rdtsc_prev = rdtsc_real;
-    vcpu->arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
-    vcpu->arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;  
+    	vcpu->arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
+    	vcpu->arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;  
 
-    return skip_emulated_instruction(vcpu);
+    	return skip_emulated_instruction(vcpu);
 }
 ```
 
@@ -107,10 +107,10 @@ Open svm.c in text editor.
 
 Find _static int (*const svm_exit_handlers[])(struct vcpu_svm *svm)_ (~2700 lines) and add this line:
 ```c
-	[SVM_EXIT_AVIC_INCOMPLETE_IPI]			= avic_incomplete_ipi_interception,
+	[SVM_EXIT_AVIC_INCOMPLETE_IPI]		= avic_incomplete_ipi_interception,
 	[SVM_EXIT_AVIC_UNACCELERATED_ACCESS]	= avic_unaccelerated_access_interception,
-	[SVM_EXIT_VMGEXIT]						= sev_handle_vmgexit,
-    [SVM_EXIT_RDTSC]						= handle_rdtsc_interception, //added line
+	[SVM_EXIT_VMGEXIT]			= sev_handle_vmgexit,
+	[SVM_EXIT_RDTSC]			= handle_rdtsc_interception, //added line
 };
 ```
 
@@ -127,7 +127,7 @@ static u32 print_once = 1;
 
 static int handle_rdtsc_interception(struct vcpu_svm *svm) 
 {
-    static u64 rdtsc_fake = 0;
+    	static u64 rdtsc_fake = 0;
 	static u64 rdtsc_prev = 0;
 	u64 rdtsc_real = rdtsc();
 
@@ -154,9 +154,9 @@ static int handle_rdtsc_interception(struct vcpu_svm *svm)
 	rdtsc_prev = rdtsc_real;
 
 	svm->vcpu.arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
-    svm->vcpu.arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
+    	svm->vcpu.arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
 
-    return skip_emulated_instruction(&svm->vcpu);
+    	return skip_emulated_instruction(&svm->vcpu);
 }
 ```
 
