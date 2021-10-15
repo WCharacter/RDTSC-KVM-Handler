@@ -105,7 +105,7 @@ static int handle_rdtsc(struct kvm_vcpu *vcpu)
 ## Changes for AMD users
 Open svm.c in text editor.
 
-Find _static int (*const svm_exit_handlers[])(struct vcpu_svm *svm)_ (~2700 lines) and add this line:
+Find _static int (*const svm_exit_handlers[])(struct kvm_vcpu *vcpu)_ (~2700 lines) and add this line:
 ```c
 	[SVM_EXIT_AVIC_INCOMPLETE_IPI]		= avic_incomplete_ipi_interception,
 	[SVM_EXIT_AVIC_UNACCELERATED_ACCESS]	= avic_unaccelerated_access_interception,
@@ -114,18 +114,18 @@ Find _static int (*const svm_exit_handlers[])(struct vcpu_svm *svm)_ (~2700 line
 };
 ```
 
-Next find _static void init_vmcb(struct vcpu_svm *svm)_ (~1000 lines) and add this line:
+Next find _static void init_vmcb(struct kvm_vcpu *vcpu)_ (~1000 lines) and add this line:
 ```c
 	svm_set_intercept(svm, INTERCEPT_RDPRU);
 	svm_set_intercept(svm, INTERCEPT_RSM);
 	svm_set_intercept(svm, INTERCEPT_RDTSC); //added line
 ```
 
-After that add this code on top of _static int (*const svm_exit_handlers[])(struct vcpu_svm *svm)_:
+After that add this code on top of _static int (*const svm_exit_handlers[])(struct kvm_vcpu *vcpu)_:
 ```c
 static u32 print_once = 1;
 
-static int handle_rdtsc_interception(struct vcpu_svm *svm) 
+static int handle_rdtsc_interception(struct kvm_vcpu *vcpu) 
 {
     	static u64 rdtsc_fake = 0;
 	static u64 rdtsc_prev = 0;
@@ -153,10 +153,10 @@ static int handle_rdtsc_interception(struct vcpu_svm *svm)
 	}
 	rdtsc_prev = rdtsc_real;
 
-	svm->vcpu.arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
-    	svm->vcpu.arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
+	vcpu->vcpu.arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
+    	vcpu->vcpu.arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
 
-    	return skip_emulated_instruction(&svm->vcpu);
+    	return skip_emulated_instruction(vcpu);
 }
 ```
 
