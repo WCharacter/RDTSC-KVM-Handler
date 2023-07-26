@@ -1,10 +1,9 @@
+# Obsolete
+This Readme is obsolete due to a new kernel version.
+
 # Installation
 
 Copy this files into your linux kernel.
-
-For Pop!_OS users:
-* vmx.c is going to /arch/x86/kvm/vmx
-* svm.c is going to /arch/x86/kvm
 
 For new kernel:
 * vmx.c is going to /arch/x86/kvm/vmx
@@ -184,5 +183,3 @@ sudo make INSTALL_MOD_STRIP=1 modules_install && sudo make install
 ```bash
 uname -a
 ```
-# Issues
-There is a lot of kernel versions, so this changes in your kernel can lead to compile time errors. I'm not guarantee that this method would work on your kernel without any modifications. This code works with Pop_OS which uses 5.4.41+ kernel and it works with a newest kernel from official repository of [linux](https://github.com/torvalds/linux). Latest kernel modification for Arch linux uses the same vmx and svm files as official repository, so it should work too.
