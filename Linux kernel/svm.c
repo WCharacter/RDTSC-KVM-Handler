@@ -3144,14 +3144,14 @@ static int handle_rdtsc_interception(struct kvm_vcpu *vcpu)
 	static u64 rdtsc_fake = 0;
 	static u64 rdtsc_prev = 0;
 	u64 rdtsc_real = rdtsc();
-	
+
 	if(print_once)
 	{
 		printk("[handle_rdtsc] fake rdtsc svm function is working\n");
 		print_once = 0;
 		rdtsc_fake = rdtsc_real;
 	}
-	
+
 	if(rdtsc_prev != 0)
 	{
 		if(rdtsc_real > rdtsc_prev)
@@ -3161,16 +3161,16 @@ static int handle_rdtsc_interception(struct kvm_vcpu *vcpu)
 			rdtsc_fake += fake_diff;
 		}
 	}
-	
+
 	if(rdtsc_fake > rdtsc_real)
 	{
 		rdtsc_fake = rdtsc_real;
 	}
 	rdtsc_prev = rdtsc_real;
-	
+
 	vcpu->arch.regs[VCPU_REGS_RAX] = rdtsc_fake & -1u;
     	vcpu->arch.regs[VCPU_REGS_RDX] = (rdtsc_fake >> 32) & -1u;
-	
+
     	return svm_skip_emulated_instruction(vcpu);
 }
 
